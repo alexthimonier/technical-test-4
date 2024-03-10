@@ -17,7 +17,7 @@ export default function EditProject() {
   useEffect(() => {
     (async () => {
       const { data: u } = await api.get(`/project/${id}`);
-      setProject(u);
+      setProject(u[0]);
     })();
   }, []);
 
@@ -66,7 +66,7 @@ export default function EditProject() {
                   <div className="flex gap-4 flex-wrap">
                     <div className="w-full md:w-[260px] mt-2">
                       <div className="text-[14px] text-[#212325] font-medium	">Name of project</div>
-                      <input className="projectsInput text-[14px] font-normal text-[#212325] rounded-[10px]" name="name" disabled value={values.name} onChange={handleChange} />
+                      <input className="projectsInput text-[14px] font-normal text-[#212325] rounded-[10px]" name="name" value={values.name} onChange={handleChange} />
                     </div>
                     <div className="w-full md:w-[260px] mt-2">
                       <div className="text-[14px] text-[#212325] font-medium	">Lead by name</div>
@@ -136,10 +136,10 @@ export default function EditProject() {
                   </div>
 
                   <div className="w-full mt-3">
-                    <div className="text-[14px] text-[#212325] font-medium	">Autres</div>
-                    {(values.links || []).map((link) => {
+                    <div className="text-[14px] text-[#212325] font-medium	">Others</div>
+                    {(values.links || []).map((link, index) => {
                       return (
-                        <div className="flex flex-1 flex-row mt-2 items-center gap-1">
+                        <div key={index} className="flex flex-1 flex-row mt-2 items-center gap-1">
                           <div className="flex gap-1 flex-1 items-center">
                             <input
                               className="projectsInput mt-0 text-[14px] font-normal text-[#212325] rounded-[10px]"
@@ -213,7 +213,7 @@ export default function EditProject() {
                       />
                       {bufferOtherLink ? (
                         <button className="px-4 py-2 rounded-xl bg-[#0560FD] text-white mt-2" type="submit">
-                          ajouter
+                          add
                         </button>
                       ) : null}
                     </form>
