@@ -9,10 +9,12 @@ import SelectProject from "../../components/selectProject";
 import SelectMonth from "./../../components/selectMonth";
 
 import { getDaysInMonth } from "./utils";
+import { UserCard } from "../user/list";
 
 const Activity = () => {
   const [date, setDate] = useState(null);
   const [user, setUser] = useState(null);
+  const [users, setUsers] = useState([]);
   const [project, setProject] = useState("");
 
   const u = useSelector((state) => state.Auth.user);
@@ -30,13 +32,27 @@ const Activity = () => {
     
     if (userId) {
       const response = await api.get(`/user/${userId}`);
-      return setUser(response.data);
+      setUser(response.data);
     } else {
-      return setUser(u);
+      setUser(u);
     }
+
+    const { data } = await api.get("/user");
+    setUsers(data);
   }
 
   if (user === null) return <Loader />;
+
+  const showUsers = users && 
+    <div className="overflow-x-auto">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 py-6 gap-5 ">
+        {users.map((usr) => {
+          return <UserCard key={usr._id} hit={usr} onClickRoutine={(u) => setUser(u)} ></UserCard>;
+        })}
+      </div>
+    </div>
+
+  const showActivities = date && user && <Activities date={new Date(date)} user={user} project={project} />
 
   return (
     // Container
@@ -49,7 +65,8 @@ const Activity = () => {
         />
         <SelectMonth start={-3} indexDefaultValue={3} value={date} onChange={(e) => setDate(e.target.value)} showArrows />
       </div>
-      {date && user && <Activities date={new Date(date)} user={user} project={project} />}
+      {showUsers}
+      {showActivities}
     </div>
   );
 };

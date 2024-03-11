@@ -7,6 +7,8 @@ import LoadingButton from "../../components/loadingButton";
 import api from "../../services/api";
 
 const NewList = () => {
+  const history = useHistory();
+
   const [users, setUsers] = useState(null);
   const [projects, setProjects] = useState([]);
   const [usersFiltered, setUsersFiltered] = useState(null);
@@ -76,7 +78,7 @@ const NewList = () => {
         <div className="overflow-x-auto">
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 py-6 gap-5 ">
             {usersFiltered.map((hit, idx) => {
-              return <UserCard key={hit._id} idx={idx} hit={hit} projects={projects} />;
+              return <UserCard key={hit._id} idx={idx} hit={hit} projects={projects} onClickRoutine={(u) => history.push(`/user/${u._id}`)} redirectPath={"/user"} />;
             })}
           </div>
         </div>
@@ -210,11 +212,10 @@ const FilterStatus = ({ filter, setFilter }) => {
   );
 };
 
-const UserCard = ({ hit, projects }) => {
-  const history = useHistory();
+export const UserCard = ({ hit, projects, onClickRoutine }) => {
   return (
     <div
-      onClick={() => history.push(`/user/${hit._id}`)}
+      onClick={() => onClickRoutine(hit)}
       className="flex flex-col bg-white hover:-translate-y-1 transition duration-100 shadow-sm ease-in cursor-pointer  relative rounded-[16px] pb-4 overflow-hidden">
       <div className="relative flex items-start justify-center pt-6 pb-2">
         <div className="absolute top-0 left-0 w-full h-full z-10 overflow-hidden">
