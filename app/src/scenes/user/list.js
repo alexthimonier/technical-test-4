@@ -77,8 +77,8 @@ const NewList = () => {
         </div>
         <div className="overflow-x-auto">
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 py-6 gap-5 ">
-            {usersFiltered.map((hit, idx) => {
-              return <UserCard key={hit._id} idx={idx} hit={hit} projects={projects} onClickRoutine={(u) => history.push(`/user/${u._id}`)} redirectPath={"/user"} />;
+            {usersFiltered.map((hit) => {
+              return <UserCard key={hit._id} hit={hit} onClickRoutine={(u) => history.push(`/user/${u._id}`)} />;
             })}
           </div>
         </div>
@@ -212,7 +212,7 @@ const FilterStatus = ({ filter, setFilter }) => {
   );
 };
 
-export const UserCard = ({ hit, projects, onClickRoutine }) => {
+export const UserCard = ({ hit, onClickRoutine }) => {
   return (
     <div
       onClick={() => onClickRoutine(hit)}
