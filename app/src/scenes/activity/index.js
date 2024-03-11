@@ -17,16 +17,24 @@ const Activity = () => {
 
   const u = useSelector((state) => state.Auth.user);
 
-  useEffect(() => {
+  useEffect(async () => {
+    initData()
+  }, []);
+
+  async function initData() {
     const search = window.location.search;
     const params = new URLSearchParams(search);
-    const user = params.get("user");
+    const userId = params.get("userId");
     const date = params.get("date");
     if (date) setDate(new Date(date));
-
-    if (user) return setUser({ name: user });
-    return setUser(u);
-  }, []);
+    
+    if (userId) {
+      const response = await api.get(`/user/${userId}`);
+      return setUser(response.data);
+    } else {
+      return setUser(u);
+    }
+  }
 
   if (user === null) return <Loader />;
 
@@ -52,7 +60,8 @@ const Activities = ({ date, user, project }) => {
 
   useEffect(() => {
     (async () => {
-      const { data } = await api.get(`/activity?date=${date.getTime()}&user=${user.name}&project=${project}`);
+      const userId = user._id
+      const { data } = await api.get(`/activity?date=${date.getTime()}&userId=${userId}&projectId=${project}`);
       const projects = await api.get(`/project/list`);
       setActivities(
         data.map((activity) => {
